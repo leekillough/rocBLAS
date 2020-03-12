@@ -200,6 +200,10 @@ static_assert(std::is_trivial<Arguments>{},
               "incompatible with C.");
 
 // Arguments enumerators
+// Create enum 
+//     rocblas_argument : int {e_M, e_N, e_K, e_KL, ... } 
+// There is an enum value for each line in FOR_EACH_ARGUMENT. 
+//
 #define CREATE_ENUM(NAME) e_##NAME,
 enum rocblas_argument : int
 {
@@ -209,6 +213,10 @@ enum rocblas_argument : int
 
 #if __cplusplus >= 201703L
 // C++17
+// ArgumentsHelper contains a templated lambda apply<> where there is a template
+// specialization for each line in the CPP macro FOR_EACH_ARGUMENT. For example, 
+// the first lambda is:  apply<e_M> = [](auto&& func, const Arguments& arg, auto){func("M", arg.m)}
+// This lambda can be used to print "M" and arg.m
 struct ArgumentsHelper
 {
     template <rocblas_argument>
